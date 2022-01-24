@@ -9,16 +9,10 @@ class CategoryItem extends StatelessWidget {
   CategoryItem({this.id = '', this.title = '', this.color = Colors.orange});
 
   void selectCategory(BuildContext ctx) {
-    Navigator.of(ctx).push(
-      MaterialPageRoute(
-        builder: (_) {
-          return RecipesScreen(
-            categoryId: id,
-            categoryTitle: title,
-          );
-        },
-      ),
-    );
+    Navigator.of(ctx).pushNamed(RecipesScreen.routeName, arguments: {
+      'id': id,
+      'title': title,
+    });
   }
 
   @override
