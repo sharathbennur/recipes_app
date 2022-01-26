@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../data/dummy_recipes.dart';
+import '../widgets/recipe_item.dart';
 
 class RecipesScreen extends StatelessWidget {
   static const routeName = '/categories';
@@ -24,9 +26,13 @@ class RecipesScreen extends StatelessWidget {
         ),
         body: ListView.builder(
           itemBuilder: (ctx, index) {
-            return Text(
-              categoryRecipes[index].title,
-              style: TextStyle(color: Colors.black),
+            return RecipeItem(
+              id: categoryRecipes[index].id,
+              title: categoryRecipes[index].title,
+              imageUrl: categoryRecipes[index].imageUrl,
+              duration: categoryRecipes[index].duration,
+              complexity: categoryRecipes[index].complexity,
+              cost: categoryRecipes[index].cost,
             );
           },
           itemCount: categoryRecipes.length,

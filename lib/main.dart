@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './screens/tabs.dart';
+import './screens/recipe_detail.dart';
 import './screens/recipes.dart';
 import './screens/categories.dart';
 
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Raleway',
         textTheme: ThemeData.light().textTheme.copyWith(
               bodyText1: const TextStyle(color: Colors.lightGreen),
-              bodyText2: const TextStyle(color: Colors.white),
+              bodyText2: const TextStyle(color: Colors.black),
               headline3: const TextStyle(
                 fontSize: 24,
                 fontFamily: 'RobotoCondensed',
@@ -28,8 +30,12 @@ class MyApp extends StatelessWidget {
             ),
       ),
       routes: {
-        '/': (ctx) => const CategoriesScreen(),
-        '/categories': (ctx) => RecipesScreen(),
+        '/': (ctx) => TabsScreen(),
+        RecipesScreen.routeName: (ctx) => RecipesScreen(),
+        RecipeDetailScreen.routeName: (ctx) => RecipeDetailScreen(),
+      },
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(builder: (context) => CategoriesScreen());
       },
     );
   }
