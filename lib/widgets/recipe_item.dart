@@ -46,11 +46,17 @@ class RecipeItem extends StatelessWidget {
     }
   }
 
-  void selectRecipe(context) {
-    Navigator.of(context).pushNamed(
+  void selectRecipe(BuildContext context) {
+    Navigator.of(context)
+        .pushNamed(
       RecipeDetailScreen.routeName,
       arguments: id,
-    );
+    )
+        .then((result) {
+      if (result != null) {
+        // removeItem(result);
+      }
+    });
   }
 
   @override

@@ -1,41 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:recipes_app/models/recipe.dart';
 
-import '../data/dummy_recipes.dart';
 import '../widgets/recipe_item.dart';
+import '../models/recipe.dart';
 
-class RecipesScreen extends StatelessWidget {
-  static const routeName = '/categories';
-  // final String categoryId;
-  // final String categoryTitle;
+class RecipesScreen extends StatefulWidget {
+  static const routeName = '/category-meals';
 
-  // RecipesScreen({this.categoryId = '', this.categoryTitle = ''});
+  final List<Recipe> availableMeals;
+
+  RecipesScreen(this.availableMeals);
+
+  @override
+  _RecipesScreenState createState() => _RecipesScreenState();
+}
+
+class _RecipesScreenState extends State<RecipesScreen> {
+  late String categoryTitle;
+  late List<Recipe> displayedMeals;
+  var _loadedInitData = false;
+
+  @override
+  void initState() {
+    // ...
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_loadedInitData) {
+      final routeArgs =
+          ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+      categoryTitle = routeArgs['title'] as String;
+      final categoryId = routeArgs['id'];
+      displayedMeals = widget.availableMeals.where((meal) {
+        return meal.categories.contains(categoryId);
+      }).toList();
+      _loadedInitData = true;
+    }
+    super.didChangeDependencies();
+  }
+
+  void _removeMeal(String mealId) {
+    setState(() {
+      displayedMeals.removeWhere((meal) => meal.id == mealId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final routeArgs =
-        ModalRoute.of(context)?.settings.arguments as Map<String, String>;
-    final categoryTitle = routeArgs['title'];
-    final categoryId = routeArgs['id'];
-    final categoryRecipes = dummyRecipes.where((recipe) {
-      return recipe.categories.contains(categoryId);
-    }).toList();
-
     return Scaffold(
-        appBar: AppBar(
-          title: Text("$categoryTitle Recipes"),
-        ),
-        body: ListView.builder(
-          itemBuilder: (ctx, index) {
-            return RecipeItem(
-              id: categoryRecipes[index].id,
-              title: categoryRecipes[index].title,
-              imageUrl: categoryRecipes[index].imageUrl,
-              duration: categoryRecipes[index].duration,
-              complexity: categoryRecipes[index].complexity,
-              cost: categoryRecipes[index].cost,
-            );
-          },
-          itemCount: categoryRecipes.length,
-        ));
+      appBar: AppBar(
+        title: Text(categoryTitle),
+      ),
+      body: ListView.builder(
+        itemBuilder: (ctx, index) {
+          return RecipeItem(
+            id: displayedMeals[index].id,
+            title: displayedMeals[index].title,
+            imageUrl: displayedMeals[index].imageUrl,
+            duration: displayedMeals[index].duration,
+            cost: displayedMeals[index].cost,
+            complexity: displayedMeals[index].complexity,
+          );
+        },
+        itemCount: displayedMeals.length,
+      ),
+    );
   }
 }

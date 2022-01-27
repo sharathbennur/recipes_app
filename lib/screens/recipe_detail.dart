@@ -5,6 +5,11 @@ import '../data/dummy_recipes.dart';
 class RecipeDetailScreen extends StatelessWidget {
   static const routeName = '/recipe-detail';
 
+  final Function toggleFavorite;
+  final Function isFavorite;
+
+  RecipeDetailScreen(this.toggleFavorite, this.isFavorite);
+
   Widget buildSectionTitle(BuildContext context, String text) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -22,8 +27,8 @@ class RecipeDetailScreen extends StatelessWidget {
         border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(10),
       ),
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       height: 150,
       width: 300,
       child: child,
@@ -36,7 +41,7 @@ class RecipeDetailScreen extends StatelessWidget {
     final selectedMeal = dummyRecipes.firstWhere((meal) => meal.id == mealId);
     return Scaffold(
       appBar: AppBar(
-        title: Text('${selectedMeal.title}'),
+        title: Text(selectedMeal.title),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -53,7 +58,7 @@ class RecipeDetailScreen extends StatelessWidget {
             buildContainer(
               ListView.builder(
                 itemBuilder: (ctx, index) => Card(
-                  color: Theme.of(context).backgroundColor,
+                  color: Theme.of(context).accentColor,
                   child: Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 5,
@@ -77,7 +82,9 @@ class RecipeDetailScreen extends StatelessWidget {
                         selectedMeal.steps[index],
                       ),
                     ),
-                    Divider()
+                    const Divider(
+                      height: 20,
+                    )
                   ],
                 ),
                 itemCount: selectedMeal.steps.length,
@@ -85,6 +92,12 @@ class RecipeDetailScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          isFavorite(mealId) ? Icons.star : Icons.star_border,
+        ),
+        onPressed: () => toggleFavorite(mealId),
       ),
     );
   }
